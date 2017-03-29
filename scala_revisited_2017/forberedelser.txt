@@ -1,0 +1,23 @@
+
+Installer nyeste sbt:
+  * http://www.scala-sbt.org/download.html
+
+Installer nyeste Scala:
+  * https://www.scala-lang.org/download/
+
+Installer nyeste stabile IntelliJ IDEA (anbefales)
+  * https://www.jetbrains.com/idea/#chooseYourEdition
+  * Community edition fungerer fint med Scala (nyttig med Ultimate for f.eks. bruk med Play framework)
+
+Alternativt kan man bruke ScalaIDE basert på Eclipse:
+
+  * http://scala-ide.org/download/sdk.html
+  * Pr. nå virker IntelliJ (selv community) til å være bedre med Scala
+
+Valgfritt: installer Ammonite-REPL (fungerer best med Linux/OS X)
+  * http://www.lihaoyi.com/Ammonite/#Ammonite-REPL
+  * Denne er nyttig for å skrive scripts (Scala scripts) som kan kjøres rett fra terminal ala scripts skrevet i Bash og Python,
+    og samtidig støtte eksterne avhengigheter, støtte for filoperasjoner (Ammonite-Ops)
+  * Den interaktive terminalen er også (foreløpig) bedre enn den som følger med Scala
+  * Man har også Ammonite-Shell, som kan brukes som alternativ til vanlig Bash-terminal for å kunne skrive Scala-kode direkte i terminalen
+    (istedet for Bash-onlinere)

@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>scala.js – javaBin 24.11.2015</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Marius B. Kotsbak">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>Scala.js & React</h1>
+					<h3>Julemøte i javaBin Trondheim 2015</h3>
+					<p>
+					  <a href="mailto:marius@kotsbak.com">Marius B.Kotsbak</a> / <a href="http://twitter.com/mkotsbak">@mkotsbak</a> / <a href="https://github.com/mkotsbak">github.com/mkotsbak</a>
+					</p>
+					<p>
+					  Konsulent i <br /> <img src="logo_webstep.jpg" alt="Webstep" style="width: 30%; height: 30%"><br />i Trondheim
+					</p>
+				</section>
+
+				<section>
+					<section>
+						<h2>Scala</h2>
+
+						<p class="fragment">
+					  <b>Scala</b> er et programmeringsspråk med full støtte for både <b>objektorintert</b> og <b>funksjonell programmering</b>
+						med et veldig <b>sterk statisk typesystem</b> og <b>typeinterferens</b>. Scala-programmer er svært korte (lite boilerplate) sammenliknet med andre programmeringsspråk. Mange av Scalas designvalg ble inspirert av kritikk av svakhetene i Java.
+					</p>
+
+					<p class="fragment">
+					  Kildekoden blir kompilert til Java-bytecode, og kjøres på en JVM. Java-bibliotekene kan brukes direkte i Scala kode og motsatt.
+					</p>
+					<p class="fragment">
+					  Designet av Martin Odersky og utviklet Programming Methods Laboratory på École Polytechnique Fédérale de Lausanne. Komersiell support og utvikling av Typesafe.
+					</p>
+					</section>
+
+					<section>
+						<h2>Eksempel: Java</h2>
+						<pre>
+								<code class="java">
+public class Person
+{
+  private  String firstName;
+  private  String lastName;
+  String getFirstName() {return firstName;}
+  void setFirstName(String firstName) {this.firstName = firstName;}
+  String getLastName() {return lastName;}
+  void setLastName(String lastName) {this.lastName = lastName;}
+  int hashCode() = { .... }
+  boolean equals(Object o) { .... }
+}
+								</code>
+						</pre>
+						<p>(uten Lombok e.l. hack)</p>
+					</section>
+					<section>
+						<h2>Eksempel: Scala</h2>
+<pre>
+	<code class="scala">
+		case class Person(firstName:String, lastName:String)
+	</code>
+</pre>
+
+					</section>
+					<section>
+						<h2>Myter om scala</h2>
+						<ul>
+							<li class="fragment">Scala blir overflødig med Java 8</li>
+							<ul>
+								<li class="fragment">Fakta: Den Verste boilerplate forsvinner, men det er mye mer:</li>
+								<li class="fragment">typeinterferens, makroer, pattern matching, Option i API, immutabilitet, case classes, overlasting av operatorer, navngitte parametre, defaultverdier, implicits etc.</li>
+							</ul>
+							<li class="fragment">Scala er vanskelig å lære</li>
+								<ul>
+									<li class="fragment">Fakta: Det er et stort språk med mye syntax, men man kan ta i bruk så mye man ønsker.</li>
+									<li class="fragment">Største forskjellen er funksjonell programmering og oppfordring til immutabilitet, som kommer i alle språk nå (Java 8 lambdas, Immutable.js)</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+				</section>
+
+				<section>
+					<h2>Scala.Js</h2>
+					<ul>
+						<li class="fragment">Kompilering av Scala-kildekode for å kjøre som Javascript ("webbens assemblykode"), som Typescript, Coffescript etc.</li>
+						<li class="fragment">Startet som et forskningsprosjekt på EPFL. Nå et stort miljø rundt både kompilator og tilhørende bibiliotek</li>
+						<li class="fragment">Ble erklært stabilt for bruk (og stabile API-er) våren 2015</li>
+						<li class="fragment">Det meste av Scalas funksjoner er støttet (inkl. makroer, Futures, typeklasser, async{await}). Mangler reflection og tråder/sleep (som i JS).</li>
+						<li class="fragment">Bibliotek kan krysskompileres til både Scala.Js og JVM og publisere begge til Maven-repositories.</li>
+					</ul>
+				</section>
+
+				<section>
+					<section>
+						<h2>Hvorfor Scala.Js?</h2>
+
+					<ul>
+						<li class="fragment">Typesikker kode. Ikke runtime-feil eller bugs ved typos eller blanding av typer ("kompilerer det, så fungerer det")</li>
+						<li class="fragment">Fullføring og dokumentasjon i IDE, ikke i ekstern dokumentasjon:
+							<img src="ide-screenshot.png">
+						</li>
+					</ul>
+					</section>
+					<section>
+						<h2>Hvorfor Scala.Js?</h2>
+						<ul>
+						<li class="fragment">Moderne og avansert språk</li>
+						<li class="fragment">Minimalt med boilerplate pga. bl.a. språkfunksjoner og makroer</li>
+						<li class="fragment">Gjenbruk mange av bibliotekene fra vanlig Scala i stedet for tilsvarende Javascript-bibliotek</li>
+						<li class="fragment">Samme byggesystem (sbt) for både frontend og backend. Webjars sørger for js-deps automatisk
+							(trenger ikke Gulp, Grunt, Bower, NPM eller hva det mest populære bygge/pakkesystem for JS heter i dag):<br />
+							<i>jsDependencies += "org.webjars" % "jasmine" % "1.3.1" / "jasmine-html.js" dependsOn "jasmine.js" <br /></i>
+							Wrappere sine avhengigheter hentes automatisk via maven
+						</li>
+						</ul>
+					</section>
+					<section>
+						<ul>
+						<li class="fragment">Deling av kode mellom klient og sørver (algoritmer, klasser serialisert over JSON, RPC)</li>
+						<li class="fragment">Bruk samme testrammeverk på klient- og sørverkode. Kjør samme tester under JVM og Node.js.</li>
+						<li class="fragment">Det er GØY å drive med webprogrammering med Scala.Js!:</li>
+						<li class="fragment">Sitat fra utvikler av Querki: "Switching to Scala.js improved productivity something like tenfold, both due to the strongly-typed environment and the clean end-to-end integration with the back end, thanks to deep Autowire-based APIs.  It's now far easier to add new UI pages, and new APIs to drive them"</li>
+						</ul>
+					</section>
+				</section>
+
+				<section>
+					<h2>Men ES6 eller Typescript løser da alle problemer med Javascript?</h2>
+					<p>ES6 har mange nyttige tillegg, men Scala er fremdeles mer avansert språk, og det mangler typer.</p>
+					<p>Typescript er OK, men typer er ikke obligatorisk, og kun Node.Js (med callback pyramid of doom) er støttet på sørver.</p>
+				</section>
+
+				<section>
+					<h2>Pipeline</h2>
+					<img src="sjs-pipeline.jpg">
+					<p>Java-bibliotek støttes ikke. Inkompatibilitet med lisenser gjør at man ikke kan konvertere Java-kode til Scala og krysskompilere</p>
+					<p>Kan løses med clean room-kloner, e.g. JodaTime -> SodaTime</p>
+				</section>
+
+				<section>
+					<h2>Interop med Javascript</h2>
+					<pre>
+						<code class="scala">
+import scala.scalajs.js.Dynamic.{global => g}
+
+@JSExport
+object HelloWorld {
+    @JSExport
+    def main(): Unit = {
+        println("Hello world!")
+
+        val seekBarAndroid: Dynamic =
+           g.require("react-native-seekbar-android")
+    }
+}
+						</code>
+					</pre>
+				</section>
+				<section>
+					<h2>Datatyper</h2>
+					<ul>
+						<li>Vanlige som Boolean, Int, Float er støttet</li>
+						<li>var x = 5; val y = "Constant"</li>
+						<li>js.Object</li>
+						<li>js.Function (konverteres automatisk til/fra Scala-funksjoner)</li>
+						<li>Javascript-objekter: js.Dynamic.literal(foo = 42, bar = "foobar") eller js.Dynamic.literal("foo" -> 42, "bar" -> "foobar")</li>
+						<li>js.UndefOr[T] og pseudo-union: Int | Boolean</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Definere ES6-klasser</h2>
+					<pre>
+<code class="scala">
+import scala.scalajs.js
+import js.annotation._
+
+@ScalaJSDefined
+class Foo extends js.Object {
+  val x: Int = 4
+  def bar(x: Int): Int = x + 1
+}
+</code>
+					</pre>
+					<p>Kan brukes mot API-er som krever JS-klasser, f.eks. React</p>
+				</section>
+				<section>
+					<h2>JS-wrappere</h2>
+					<pre>
+						<code class="scala">
+@js.native
+trait Window extends js.Object {
+	val document: HTMLDocument = js.native
+	var location: String = js.native
+
+	def innerWidth: Int = js.native
+	def innerHeight: Int = js.native
+
+	def alert(message: String): Unit = js.native
+
+	def open(url: String, target: String,
+		features: String = ""): Window = js.native
+	def close(): Unit = js.native
+}
+
+@JSName("THREE.Scene")
+@js.native
+class Scene extends js.Object
+					</code>
+					</pre>
+				</section>
+
+				<section>
+					<h2>Bibliotek</h2>
+					<p>Mer og mer blir tilgjengelig krysskompilert for Scala.Js, f.eks: Monocle, Shapeless, Akka, ScalaTest, ScalaCheck</p>
+					<p>Enkelt å krysskompilere om alle dependencies finnes for Scala.Js, og koden ikke bruker ustøttede operasjoner som tråder eller reflection</p>
+					<p>Plugin for Play bygger automatisk JS ved endring ved relasting av siden</p>
+				</section>
+
+				<section>
+					<h2>Vanlige stacks i bruk</h2>
+					<ol>
+						<li>HTML-kode i egen fil. Kun litt DOM-manipulering, evt. via jQuery-wrapper</li>
+						<li>Scalatags evt. med f.eks. Scala.Rx for funksjonelt reaktiv programmering:
+							<pre>
+body(
+    div(
+      h1(id:="title", "This is a title"),
+      p("This is a big paragraph of text")
+    )
+)
+							</pre>
+						</li>
+						<li>JS-wrappere for f.eks. Angular og FB React</li>
+						<li>Native webrammeverk for Scala.js som Widok/MetaRx, ScalaJS Binding</li>
+					</ol>
+				</section>
+
+				<section>
+					<h2>React og React Native</h2>
+					<p>Man har en veldig populær wrapper for React: scalajs-react</p>
+					<p>Pakker inn React på en typesikker måte for props og state</p>
+				</section>
+
+				<section>
+					<div class="stretch">
+						<iframe width="100%" height="100%" src="https://japgolly.github.io/scalajs-react"></iframe>
+					</div>
+				</section>
+
+				<section>
+					<section>
+						<h2>React Native</h2>
+						<p>Relativt nytt, spesielt for Android. Finnes en umoden wrapper: Sri (Scala React interface)</p>
+						<p>Denne er en mer Javascript-basert tilnærming ved bruk av støtten for ES6-klasser i nyeste React-versjonene. Foreløpig noen deler som er
+						mindre sterkt typet. Støtter både iOS, Android, Web og Desktop (via Electron)</p>
+					</section>
+					<section><img src="sri.png"></section>
+					<section><img src="moviesapp.gif"></section>
+				</section>
+
+				<section>
+					<h2>Demo / spørsmål?</h2>
+
+					Helt fersk ny webside for prosjektet: <a href="http://www.scala-js.org/">www.scala-js.org</a>
+					<p>
+						<a href="mailto:marius@kotsbak.com">Marius B.Kotsbak</a> / <a href="http://twitter.com/mkotsbak">@mkotsbak</a> / <a href="https://github.com/mkotsbak">github.com/mkotsbak</a>
+					</p>
+					<p>
+						<img src="logo_webstep.jpg" alt="Webstep" style="width: 30%; height: 30%"><br />
+					</p>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
